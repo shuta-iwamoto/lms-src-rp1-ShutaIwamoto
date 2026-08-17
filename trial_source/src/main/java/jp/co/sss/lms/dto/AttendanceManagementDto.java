@@ -1,5 +1,7 @@
 package jp.co.sss.lms.dto;
 
+import java.util.Date;
+
 import org.springframework.stereotype.Component;
 
 import lombok.Data;
@@ -22,4 +24,19 @@ public class AttendanceManagementDto extends StudentAttendanceDto {
 	/** セクション名 */
 	private String sectionName;
 
+	// --- 以下、HTML側で参照されている不足フィールドを追加 ---
+	/** 日付 */
+	private Date trainingDate;
+	/** 出勤時刻 */
+	private String trainingStartTime;
+	/** 退勤時刻 */
+	private String trainingEndTime;
+	/** 中抜け開始 */
+	private String blankStartTime;
+	/** 中抜け終了 */
+	private String blankEndTime;
+	/** ステータス表示名 */
+	private String statusDispName;
+	/** 備考 */
+	private String note;
 }

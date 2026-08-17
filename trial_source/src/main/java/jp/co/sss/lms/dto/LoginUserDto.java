@@ -63,5 +63,9 @@ public class LoginUserDto implements Serializable {
 	private Date leaveDate;
 	/** ファイル共有フラグ */
 	private Short fileShareFlg;
+	public Integer getId() {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
 
 }

@@ -701,4 +701,14 @@ public class DateUtil {
 		throw new IllegalStateException();
 	}
 
+	public Date getSystemDate() {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
+
+	public String getToday() {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
+
 }

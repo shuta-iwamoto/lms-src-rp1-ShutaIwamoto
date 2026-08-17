@@ -31,5 +31,17 @@ public class AttendanceForm {
 	private LinkedHashMap<Integer, String> blankTimes;
 	/** 日次の勤怠フォームリスト */
 	private List<DailyAttendanceForm> attendanceList;
+	public void setHourMap(LinkedHashMap<Integer, String> hourMap) {
+		// TODO 自動生成されたメソッド・スタブ
+		
+	}
+	public void setMinuteMap(LinkedHashMap<Integer, String> minuteMap) {
+		// TODO 自動生成されたメソッド・スタブ
+		
+	}
+	public String getCourseId() {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
 
 }

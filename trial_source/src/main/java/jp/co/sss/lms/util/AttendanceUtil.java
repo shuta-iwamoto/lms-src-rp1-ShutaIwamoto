@@ -147,4 +147,9 @@ public class AttendanceUtil {
 		return false;
 	}
 
+	public TrainingTime calcBlankTime(String blankTime) {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
+
 }

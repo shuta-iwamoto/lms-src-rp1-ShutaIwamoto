@@ -25,8 +25,7 @@
 			t2.section_name,
 			t3.student_attendance_id,
 			t3.lms_user_id,
-			t2.date AS
-			training_date,
+			t2.date AS training_date,
 			t3.training_start_time,
 			t3.training_end_time,
 			t3.status,
@@ -85,5 +84,14 @@
 			blank_time = #{blankTime}
 		WHERE student_attendance_id = #{studentAttendanceId}
 	</update>
+
+	<select id="notEnterCount" resultType="int">
+		SELECT count(*) 
+		FROM t_student_attendance 
+		WHERE lms_user_id = #{lmsUserId} 
+			AND training_date &lt; #{today} 
+			AND (training_start_time IS NULL OR training_start_time = '')
+			AND delete_flg = 0
+	</select>
 
 </mapper>

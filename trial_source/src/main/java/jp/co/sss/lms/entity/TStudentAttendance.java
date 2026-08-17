@@ -22,6 +22,10 @@ public class TStudentAttendance {
 	private String trainingStartTime;
 	/** 退勤時間 */
 	private String trainingEndTime;
+	/** 中抜け開始時間 */
+	private String blankStartTime;
+	/** 中抜け終了時間 */
+	private String blankEndTime;
 	/** 勤怠状態 */
 	private Short status;
 	/** 備考 */
