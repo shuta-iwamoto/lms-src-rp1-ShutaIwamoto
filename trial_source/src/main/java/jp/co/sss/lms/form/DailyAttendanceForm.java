@@ -28,4 +28,20 @@ public class DailyAttendanceForm {
     private Integer trainingStartTimeMinute;
     private Integer trainingEndTimeHour;
     private Integer trainingEndTimeMinute;
+	public void setTrainingStartTimeHour(String string) {
+		// TODO 自動生成されたメソッド・スタブ
+		
+	}
+	public void setTrainingStartTimeMinute(String string) {
+		// TODO 自動生成されたメソッド・スタブ
+		
+	}
+	public void setTrainingEndTimeHour(String string) {
+		// TODO 自動生成されたメソッド・スタブ
+		
+	}
+	public void setTrainingEndTimeMinute(String string) {
+		// TODO 自動生成されたメソッド・スタブ
+		
+	}
 }
