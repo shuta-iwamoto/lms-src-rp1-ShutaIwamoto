@@ -4,44 +4,73 @@ import lombok.Data;
 
 @Data
 public class DailyAttendanceForm {
-    private Integer studentAttendanceId;
-    private String leaveDate;
-    private String trainingDate;
-    private String trainingStartTime;
-    private String trainingEndTime;
-    private Integer blankTime;
-    private String blankTimeValue;
-    private String status;
-    private String note;
-    private String sectionName;
-    private Boolean isToday;
-    private Boolean isError;
-    private String dispTrainingDate;
-    private String statusDispName;
-    private String lmsUserId;
-    private String userName;
-    private String courseName;
-    private String index;
+    
+	/** 勤怠情報ID（主キー） */
+	private Integer studentAttendanceId;
+   
+	/** 退校日 */
+	private String leaveDate;
+    
+	/** 研修日 */
+	private String trainingDate;
+	/** 出勤時刻 */
+	private String trainingStartTime;
+    
+	/** 退勤時刻 */
+	private String trainingEndTime;
+    
+	/** 中抜け時間 */
+	private Integer blankTime;
+   
+	/** 中抜け時間 */
+	private String blankTimeValue;
+   
+	/** ステータスコード */
+	private String status;
+    
+	/** 備考 */
+	private String note;
+    
+	/** セクション名 */
+	private String sectionName;
+   
+	/** 本日判定フラグ */
+	private Boolean isToday;
+    
+	/** エラー判定フラグ */
+	private Boolean isError;
+    
+	/** 研修日 */
+	private String dispTrainingDate;
+    
+	/** ステータス表示名 */
+	private String statusDispName;
+    
+	/** LMSユーザーID */
+	private String lmsUserId;
+    
+	/** ユーザー名 */
+	private String userName;
+    
+	/** コース名 */
+	private String courseName;
+   
+	/** インデックス番号 */
+	private String index;
 
+	
     // 時間・分入力用フィールド（Integer型）
-    private Integer trainingStartTimeHour;
-    private Integer trainingStartTimeMinute;
-    private Integer trainingEndTimeHour;
-    private Integer trainingEndTimeMinute;
-	public void setTrainingStartTimeHour(String string) {
-		// TODO 自動生成されたメソッド・スタブ
-		
-	}
-	public void setTrainingStartTimeMinute(String string) {
-		// TODO 自動生成されたメソッド・スタブ
-		
-	}
-	public void setTrainingEndTimeHour(String string) {
-		// TODO 自動生成されたメソッド・スタブ
-		
-	}
-	public void setTrainingEndTimeMinute(String string) {
-		// TODO 自動生成されたメソッド・スタブ
-		
-	}
+    
+	/** 出勤時刻（時） */
+	private Integer trainingStartTimeHour;
+    
+	/** 出勤時刻（分） */
+	private Integer trainingStartTimeMinute;
+    
+	/** 退勤時刻（時） */
+	private Integer trainingEndTimeHour;
+    
+	/** 退勤時刻（分） */
+	private Integer trainingEndTimeMinute;
+
 }
