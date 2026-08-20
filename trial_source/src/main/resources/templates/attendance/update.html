@@ -52,37 +52,41 @@
 							
 							<!-- 出勤時刻（時・分セレクトボックス） -->
 							<td class="w200">
-								<select th:field="*{attendanceList[__${stat.index}__].trainingStartTimeHour}" class="form-inline" style="width: 70px; display: inline-block;">
-									<option value=""></option>
-									<option th:each="i : ${#numbers.sequence(0, 23)}" th:value="${#numbers.formatInteger(i, 2)}" th:text="${#numbers.formatInteger(i, 2)}"></option>
-								</select>
-								<span>:</span>
-								<select th:field="*{attendanceList[__${stat.index}__].trainingStartTimeMinute}" class="form-inline" style="width: 70px; display: inline-block;">
-									<option value=""></option>
-									<option th:each="i : ${new int[] {0, 15, 30, 45}}" th:value="${#numbers.formatInteger(i, 2)}" th:text="${#numbers.formatInteger(i, 2)}"></option>
-								</select>
+								<div class="form-inline" style="display: flex; align-items: center; gap: 4px;">
+									<select th:field="*{attendanceList[__${stat.index}__].trainingStartTimeHour}" class="form-control" style="width: auto; padding: 4px 6px;">
+										<option value=""></option>
+										<option th:each="i : ${#numbers.sequence(0, 23)}" th:value="${i}" th:text="${#numbers.formatInteger(i, 2)}"></option>
+									</select>
+									<span>:</span>
+									<select th:field="*{attendanceList[__${stat.index}__].trainingStartTimeMinute}" class="form-control" style="width: auto; padding: 4px 6px;">
+										<option value=""></option>
+										<option th:each="i : ${#numbers.sequence(0, 59)}" th:value="${i}" th:text="${#numbers.formatInteger(i, 2)}"></option>
+									</select>
+								</div>
 							</td>
 							
 							<!-- 退勤時刻（時・分セレクトボックス） -->
 							<td class="w200">
-								<select th:field="*{attendanceList[__${stat.index}__].trainingEndTimeHour}" class="form-inline" style="width: 70px; display: inline-block;">
-									<option value=""></option>
-									<option th:each="i : ${#numbers.sequence(0, 23)}" th:value="${#numbers.formatInteger(i, 2)}" th:text="${#numbers.formatInteger(i, 2)}"></option>
-								</select>
-								<span>:</span>
-								<select th:field="*{attendanceList[__${stat.index}__].trainingEndTimeMinute}" class="form-inline" style="width: 70px; display: inline-block;">
-									<option value=""></option>
-									<option th:each="i : ${new int[] {0, 15, 30, 45}}" th:value="${#numbers.formatInteger(i, 2)}" th:text="${#numbers.formatInteger(i, 2)}"></option>
-								</select>
+								<div class="form-inline" style="display: flex; align-items: center; gap: 4px;">
+									<select th:field="*{attendanceList[__${stat.index}__].trainingEndTimeHour}" class="form-control" style="width: auto; padding: 4px 6px;">
+										<option value=""></option>
+										<option th:each="i : ${#numbers.sequence(0, 23)}" th:value="${i}" th:text="${#numbers.formatInteger(i, 2)}"></option>
+									</select>
+									<span>:</span>
+									<select th:field="*{attendanceList[__${stat.index}__].trainingEndTimeMinute}" class="form-control" style="width: auto; padding: 4px 6px;">
+										<option value=""></option>
+										<option th:each="i : ${#numbers.sequence(0, 59)}" th:value="${i}" th:text="${#numbers.formatInteger(i, 2)}"></option>
+									</select>
+								</div>
 							</td>
 							
 							<!-- 中抜け時間 -->
-							<td class="w160">
-								<select th:field="*{attendanceList[__${stat.index}__].blankTime}" class="form-control">
-									<option value=""></option>
-									<option th:each="bt : *{blankTimes}" th:value="${bt.key}" th:text="${bt.value}"></option>
-								</select>
-							</td>
+                            <td class="w160">
+                                <select th:field="*{attendanceList[__${stat.index}__].blankTime}" class="form-control">
+                                  
+                                  <option th:each="bt : *{blankTimes}" th:value="${bt.key}" th:text="${bt.value}"></option>
+                                </select>
+                            </td>
 							
 							<!-- ステータス表示 -->
 							<td class="w120">
