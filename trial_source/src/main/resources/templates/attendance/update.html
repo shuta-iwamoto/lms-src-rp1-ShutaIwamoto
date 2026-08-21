@@ -2,116 +2,130 @@
 <html xmlns:th="http://www.thymeleaf.org" th:replace="~{common/layout :: layout(~{::title},~{::body})}">
 
 <head>
-	<meta charset="UTF-8">
-	<title>勤怠情報変更｜LMS</title>
+    <meta charset="UTF-8">
+    <title>勤怠情報変更｜LMS</title>
 </head>
 
 <body>
-	<h2>勤怠管理 編集</h2>
+    <h2>勤怠管理 編集</h2>
 
-	<!-- エラーメッセージ -->
-	<th:block th:if="${not #strings.isEmpty(error)}" id="error">
-		<ul style="padding-left: 0; list-style: none;">
-			<li><span th:text="'*' + '&nbsp' + ${error}" class="help-inline error"></span></li>
-		</ul>
-	</th:block>
+    <form th:action="@{/attendance/update}" th:object="${attendanceForm}" method="post">
+        
+        <!-- バリデーションエラーメッセージの一括表示 -->
+        <div th:if="${#fields.hasAnyErrors()}">
+            <ul style="padding-left: 0; list-style: none;">
+                <li th:each="err : ${#fields.allErrors()}">
+                    <span th:text="'*' + '&nbsp;' + ${err}" class="help-inline error" style="color: red;"></span>
+                </li>
+            </ul>
+        </div>
 
-	<form th:action="@{/attendance/update}" th:object="${attendanceForm}" method="post">
-		
-		<div class="row">
-			<div class="bs-component col-sm-12">
-				<table class="table table-hover dataTable no-footer">
-					<thead class="db">
-						<tr>
-							<th class="w160">日付</th>
-							<th class="w260">コース内容</th>
-							<th class="w200">出勤</th>
-							<th class="w200">退勤</th>
-							<th class="w160">中抜け時間</th>
-							<th class="w120">ステータス</th>
-							<th class="w200">備考</th>
-						</tr>
-					</thead>
+        <!-- コントローラ等から渡されたエラーメッセージの表示 -->
+        <th:block th:if="${not #strings.isEmpty(error)}" id="error">
+            <ul style="padding-left: 0; list-style: none;">
+                <li><span th:text="'*' + '&nbsp' + ${error}" class="help-inline error" style="color: red;"></span></li>
+            </ul>
+        </th:block>
+        
+        <div class="row">
+            <div class="bs-component col-sm-12">
+                <table class="table table-hover dataTable no-footer">
+                    <thead class="db">
+                        <tr>
+                            <th class="w160">日付</th>
+                            <th class="w260">コース内容</th>
+                            <th class="w200">出勤</th>
+                            <th class="w200">退勤</th>
+                            <th class="w160">中抜け時間</th>
+                            <th class="w120">ステータス</th>
+                            <th class="w200">備考</th>
+                        </tr>
+                    </thead>
 
-					<tbody class="db">
-						<tr th:each="item, stat : *{attendanceList}">
-							
-							<!-- 日付（表示用 ＆ hidden保持） -->
-							<td class="w160">
-								<span th:text="${item.dispTrainingDate}"></span>
-								<input type="hidden" th:field="*{attendanceList[__${stat.index}__].trainingDate}" />
-								<input type="hidden" th:field="*{attendanceList[__${stat.index}__].studentAttendanceId}" />
-								<input type="hidden" th:field="*{attendanceList[__${stat.index}__].dispTrainingDate}" />
-							</td>
-							
-							<!-- コース内容（セクション名） -->
-							<td class="w260">
-								<span th:text="${item.sectionName}"></span>
-								<input type="hidden" th:field="*{attendanceList[__${stat.index}__].sectionName}" />
-							</td>
-							
-							<!-- 出勤時刻（時・分セレクトボックス） -->
-							<td class="w200">
-								<div class="form-inline" style="display: flex; align-items: center; gap: 4px;">
-									<select th:field="*{attendanceList[__${stat.index}__].trainingStartTimeHour}" class="form-control" style="width: auto; padding: 4px 6px;">
-										<option value=""></option>
-										<option th:each="i : ${#numbers.sequence(0, 23)}" th:value="${i}" th:text="${#numbers.formatInteger(i, 2)}"></option>
-									</select>
-									<span>:</span>
-									<select th:field="*{attendanceList[__${stat.index}__].trainingStartTimeMinute}" class="form-control" style="width: auto; padding: 4px 6px;">
-										<option value=""></option>
-										<option th:each="i : ${#numbers.sequence(0, 59)}" th:value="${i}" th:text="${#numbers.formatInteger(i, 2)}"></option>
-									</select>
-								</div>
-							</td>
-							
-							<!-- 退勤時刻（時・分セレクトボックス） -->
-							<td class="w200">
-								<div class="form-inline" style="display: flex; align-items: center; gap: 4px;">
-									<select th:field="*{attendanceList[__${stat.index}__].trainingEndTimeHour}" class="form-control" style="width: auto; padding: 4px 6px;">
-										<option value=""></option>
-										<option th:each="i : ${#numbers.sequence(0, 23)}" th:value="${i}" th:text="${#numbers.formatInteger(i, 2)}"></option>
-									</select>
-									<span>:</span>
-									<select th:field="*{attendanceList[__${stat.index}__].trainingEndTimeMinute}" class="form-control" style="width: auto; padding: 4px 6px;">
-										<option value=""></option>
-										<option th:each="i : ${#numbers.sequence(0, 59)}" th:value="${i}" th:text="${#numbers.formatInteger(i, 2)}"></option>
-									</select>
-								</div>
-							</td>
-							
-							<!-- 中抜け時間 -->
+                    <tbody class="db">
+                        <tr th:each="item, stat : *{attendanceList}">
+                            
+                            <!-- 日付 -->
+                            <td class="w160">
+                                <span th:text="${item.dispTrainingDate}"></span>
+                                <input type="hidden" th:field="*{attendanceList[__${stat.index}__].trainingDate}" />
+                                <input type="hidden" th:field="*{attendanceList[__${stat.index}__].studentAttendanceId}" />
+                                <input type="hidden" th:field="*{attendanceList[__${stat.index}__].dispTrainingDate}" />
+                            </td>
+                            
+                            <!-- コース内容 -->
+                            <td class="w260">
+                                <span th:text="${item.sectionName}"></span>
+                                <input type="hidden" th:field="*{attendanceList[__${stat.index}__].sectionName}" />
+                            </td>
+                            
+                            <!-- 出勤時刻 -->
+                            <td class="w200">
+                                <div class="form-inline" style="display: flex; align-items: center; gap: 4px;">
+                                    <select th:field="*{attendanceList[__${stat.index}__].trainingStartTimeHour}" class="form-control" style="width: auto; padding: 4px 6px;">
+                                        <option value=""></option>
+                                        <option th:each="i : ${#numbers.sequence(0, 23)}" th:value="${i}" th:text="${#numbers.formatInteger(i, 2)}"></option>
+                                    </select>
+                                    <span>:</span>
+                                    <select th:field="*{attendanceList[__${stat.index}__].trainingStartTimeMinute}" class="form-control" style="width: auto; padding: 4px 6px;">
+                                        <option value=""></option>
+                                        <option th:each="i : ${#numbers.sequence(0, 59)}" th:value="${i}" th:text="${#numbers.formatInteger(i, 2)}"></option>
+                                    </select>
+                                </div>
+                            </td>
+                            
+                            <!-- 退勤時刻 -->
+                            <td class="w200">
+                                <div class="form-inline" style="display: flex; align-items: center; gap: 4px;">
+                                    <select th:field="*{attendanceList[__${stat.index}__].trainingEndTimeHour}" class="form-control" style="width: auto; padding: 4px 6px;">
+                                        <option value=""></option>
+                                        <option th:each="i : ${#numbers.sequence(0, 23)}" th:value="${i}" th:text="${#numbers.formatInteger(i, 2)}"></option>
+                                    </select>
+                                    <span>:</span>
+                                    <select th:field="*{attendanceList[__${stat.index}__].trainingEndTimeMinute}" class="form-control" style="width: auto; padding: 4px 6px;">
+                                        <option value=""></option>
+                                        <option th:each="i : ${#numbers.sequence(0, 59)}" th:value="${i}" th:text="${#numbers.formatInteger(i, 2)}"></option>
+                                    </select>
+                                </div>
+                            </td>
+                            
+                            <!-- 中抜け時間 -->
                             <td class="w160">
                                 <select th:field="*{attendanceList[__${stat.index}__].blankTime}" class="form-control">
-                                  
-                                  <option th:each="bt : *{blankTimes}" th:value="${bt.key}" th:text="${bt.value}"></option>
+                                    <option value="">選択してください</option>
+                                    <option th:each="bt : *{blankTimes}" th:value="${bt.key}" th:text="${bt.value}"></option>
                                 </select>
                             </td>
-							
-							<!-- ステータス表示 -->
-							<td class="w120">
-								<span th:text="${item.statusDispName}"></span>
-								<input type="hidden" th:field="*{attendanceList[__${stat.index}__].status}" />
-								<input type="hidden" th:field="*{attendanceList[__${stat.index}__].statusDispName}" />
-							</td>
-							
-							<!-- 備考テキストボックス -->
-							<td class="w200">
-								<input type="text" th:field="*{attendanceList[__${stat.index}__].note}" class="form-control" maxlength="50" />
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
+                            
+                            <!-- ステータス（値に応じてHTML側で確実に出し分け、出席時は空白にする） -->
+                            <td class="w120">
+                                <span th:switch="${item.status}">
+                                    <span th:case="1">遅刻</span>
+                                    <span th:case="2">早退</span>
+                                    <span th:case="3">欠席</span>
+                                    <span th:case="*"></span>
+                                </span>
+                                <!-- hiddenで確実に値を保持して送信する -->
+                                <input type="hidden" th:field="*{attendanceList[__${stat.index}__].status}" />
+                            </td>
+                            
+                            <!-- 備考 -->
+                            <td class="w200">
+                                <input type="text" th:field="*{attendanceList[__${stat.index}__].note}" class="form-control" maxlength="100" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-		<!-- ボタンエリア -->
-		<div class="form-group text-center mt20">
-			<a th:href="@{/attendance/detail}" class="btn btn-default">戻る</a>
-			<input type="submit" name="complete" value="更新" class="btn btn-info update-button" />
-		</div>
+        <!-- ボタンエリア -->
+        <div class="form-group text-center mt20">
+            <a th:href="@{/attendance/detail}" class="btn btn-default">戻る</a>
+            <input type="submit" name="complete" value="更新" class="btn btn-info update-button" onclick="return confirm('更新します。よろしいですか？');" />
+        </div>
 
-	</form>
+    </form>
 </body>
 
 </html>

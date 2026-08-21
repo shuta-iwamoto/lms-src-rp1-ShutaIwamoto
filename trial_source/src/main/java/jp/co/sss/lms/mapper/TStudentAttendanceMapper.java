@@ -24,8 +24,7 @@ public interface TStudentAttendanceMapper {
 	 * @param deleteFlg
 	 * @return 勤怠情報（受講生入力）エンティティ
 	 */
-	List<TStudentAttendance> findByLmsUserId(@Param("lmsUserId") Integer lmsUserId,
-			@Param("deleteFlg") Short deleteFlg);
+	List<TStudentAttendance> findByLmsUserId(@Param("lmsUserId") Integer lmsUserId,@Param("deleteFlg") Short deleteFlg);
 
 	/**
 	 * 勤怠情報（受講生入力）取得（LMSユーザーID＆日付）
@@ -35,8 +34,7 @@ public interface TStudentAttendanceMapper {
 	 * @param deleteFlg
 	 * @return 勤怠情報（受講生入力）エンティティ
 	 */
-	TStudentAttendance findByLmsUserIdAndTrainingDate(@Param("lmsUserId") Integer lmsUserId,
-			@Param("trainingDate") Date trainingDate, @Param("deleteFlg") Short deleteFlg);
+	TStudentAttendance findByLmsUserIdAndTrainingDate(@Param("lmsUserId") Integer lmsUserId,@Param("trainingDate") Date trainingDate, @Param("deleteFlg") Short deleteFlg);
 
 	/**
 	 * 勤怠管理画面用DTOリスト取得
@@ -46,8 +44,7 @@ public interface TStudentAttendanceMapper {
 	 * @param deleteFlg
 	 * @return 勤怠管理画面用DTOリスト
 	 */
-	List<AttendanceManagementDto> getAttendanceManagement(@Param("courseId") Integer courseId,
-			@Param("lmsUserId") Integer lmsUserId, @Param("deleteFlg") Short deleteFlg);
+	List<AttendanceManagementDto> getAttendanceManagement(@Param("courseId") Integer courseId,@Param("lmsUserId") Integer lmsUserId, @Param("deleteFlg") Short deleteFlg);
 
 	/**
 	 * 勤怠情報（受講生入力）登録
@@ -73,9 +70,6 @@ public interface TStudentAttendanceMapper {
 	 * @param deleteFlg
 	 * @return 過去日の未入力件数
 	 */
-	Integer notEnterCount(
-			@Param("lmsUserId") Integer lmsUserId,
-			@Param("deleteFlg") Short deleteFlg,
-			@Param("trainingDate") Date trainingDate);
+	Integer notEnterCount(@Param("lmsUserId") Integer lmsUserId,@Param("deleteFlg") Short deleteFlg,@Param("trainingDate") Date trainingDate);
 
 }

@@ -147,9 +147,22 @@ public class AttendanceUtil {
 		return false;
 	}
 
+	/**
+	 * 中抜け時間を文字列からTrainingTimeに変換
+	 *
+	 * @param blankTime 中抜け時間（文字列）
+	 * @return TrainingTimeクラス
+	 */
 	public TrainingTime calcBlankTime(String blankTime) {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
+		if (blankTime == null || blankTime.isEmpty()) {
+			return null;
+		}
+		try {
+			int min = Integer.parseInt(blankTime);
+			return calcBlankTime(min);
+		} catch (NumberFormatException e) {
+			return null;
+		}
 	}
 
 }
