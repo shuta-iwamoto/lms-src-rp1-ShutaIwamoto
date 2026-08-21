@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import jp.co.sss.lms.dto.AttendanceManagementDto;
 import jp.co.sss.lms.dto.LoginUserDto;
 import jp.co.sss.lms.entity.TStudentAttendance;
+import jp.co.sss.lms.enums.AttendanceStatusEnum;
 import jp.co.sss.lms.form.AttendanceForm;
 import jp.co.sss.lms.form.DailyAttendanceForm;
 import jp.co.sss.lms.mapper.TStudentAttendanceMapper;
@@ -35,6 +36,9 @@ public class StudentAttendanceService {
 	@Autowired
 	private TStudentAttendanceMapper tStudentAttendanceMapper;
 
+	/**
+	 * 概要：コースIDとユーザIDから勤怠情報を検索する。中抜け時間と勤怠ステータスを表示用に加工し、DTOに詰める。
+	 */
 	public List<AttendanceManagementDto> getAttendanceManagement(Integer courseId, Integer lmsUserId) {
 		List<AttendanceManagementDto> attendanceList = tStudentAttendanceMapper.getAttendanceManagement(courseId, lmsUserId, (short) 0);
 		
@@ -53,7 +57,7 @@ public class StudentAttendanceService {
 					boolean hasStartTime = (attendance.getTrainingStartTime() != null && !attendance.getTrainingStartTime().isEmpty());
 					boolean hasEndTime = (attendance.getTrainingEndTime() != null && !attendance.getTrainingEndTime().isEmpty());
 					
-					// 1. まず備考（note）の内容をチェックしてステータスを決定する
+					// 1. 備考（note）の内容をチェックしてステータス表示名を決定
 					String note = attendance.getNote();
 					String statusName = "";
 					
@@ -63,23 +67,35 @@ public class StudentAttendanceService {
 						} else if (note.contains("早退")) {
 							statusName = "早退";
 						} else if (note.contains("欠席")) {
-							// ★「出退勤時間がある」のに備考に「欠席」と書いてある矛盾したデータの場合は、勝手に欠席にしない
-							if (hasStartTime || hasEndTime) {
-								statusName = ""; // またはDBの本来のステータスにするなど
-							} else {
+							if (!hasStartTime && !hasEndTime) {
 								statusName = "欠席";
 							}
 						}
 					}
 					
-					// 2. 備考にキーワードがない場合は、DBのステータスコードを変換
+					// 2. 備考にキーワードがない場合は、DBのステータスに応じて日本語名に変換（NONEなどの英語を露出させない）
 					if (statusName.isEmpty() && attendance.getStatus() != null) {
-						statusName = convertStatusToString(attendance.getStatus());
+						AttendanceStatusEnum statusEnum = AttendanceStatusEnum.getEnum(attendance.getStatus());
+						if (statusEnum != null) {
+							String enumName = statusEnum.name();
+							// ステータスに応じた日本語変換
+							if ("NONE".equals(enumName) || "ATTENDANCE".equals(enumName)) {
+								statusName = ""; // 通常出席の場合は表示なし
+							} else if (enumName.contains("TARDY") || enumName.contains("遅刻")) {
+								statusName = "遅刻";
+							} else if (enumName.contains("EARLY") || enumName.contains("早退")) {
+								statusName = "早退";
+							} else if (enumName.contains("ABSENT") || enumName.contains("欠席")) {
+								statusName = "欠席";
+							} else {
+								statusName = "";
+							}
+						}
 					}
 					
 					dto.setStatusDispName(statusName);
 					
-					// 中抜け時間の表示用文字列をセット
+					// 中抜け時間がある場合の値設定
 					if (attendance.getBlankTime() != null) {
 						Map<Integer, String> blankTimesMap = attendanceUtil.setBlankTime();
 						if (blankTimesMap != null) {
@@ -96,21 +112,6 @@ public class StudentAttendanceService {
 			}
 		}
 		return attendanceList;
-	}
-	
-	// ステータスコードを文字列に変換するヘルパーメソッド
-	private String convertStatusToString(Short status) {
-		if (status == null) {
-			return "";
-		}
-		// 0: 出席（表示なし）, 1: 遅刻, 2: 早退, 3: 欠席
-		switch (status) {
-			case 0: return "";
-			case 1: return "遅刻";
-			case 2: return "早退";
-			case 3: return "欠席";
-			default: return "";
-		}
 	}
 
 	public boolean hasUnenteredPastDate(Integer lmsUserId) {
@@ -200,8 +201,23 @@ public class StudentAttendanceService {
 				
 				if (attendance.getStatus() != null) {
 					dailyForm.setStatus(String.valueOf(attendance.getStatus()));
-					// ★ここで確実にステータス表示名（statusDispName）をセットする
-					dailyForm.setStatusDispName(convertStatusToString(attendance.getStatus()));
+					AttendanceStatusEnum statusEnum = AttendanceStatusEnum.getEnum(attendance.getStatus());
+					if (statusEnum != null) {
+						String enumName = statusEnum.name();
+						if ("NONE".equals(enumName) || "ATTENDANCE".equals(enumName)) {
+							dailyForm.setStatusDispName("");
+						} else if (enumName.contains("TARDY") || enumName.contains("遅刻")) {
+							dailyForm.setStatusDispName("遅刻");
+						} else if (enumName.contains("EARLY") || enumName.contains("早退")) {
+							dailyForm.setStatusDispName("早退");
+						} else if (enumName.contains("ABSENT") || enumName.contains("欠席")) {
+							dailyForm.setStatusDispName("欠席");
+						} else {
+							dailyForm.setStatusDispName("");
+						}
+					} else {
+						dailyForm.setStatusDispName("");
+					}
 				} else {
 					dailyForm.setStatus(null);
 					dailyForm.setStatusDispName("");
